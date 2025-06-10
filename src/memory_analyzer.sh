@@ -15,7 +15,7 @@ function get_memory_primary_data(){
 function top_process_consumption(){
 	printf "${MAGENTA}\n=== TOP 10 Processos com Maior Consumo ===\n${NC}"
 	printf "\n"
-	ps -eo pid,ppid,comm,%mem --sort=-%mem | head -n 10
+	ps -eo pid,ppid,comm,%mem --sort=-%mem | head -n 11
 }
 
 function get_memory_details(){
