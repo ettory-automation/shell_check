@@ -81,7 +81,7 @@ while true; do
 			if [[ -f "$DEB_KERNEL_ANALYZER_SCRIPT" ]]; then
 				sudo bash "$DEB_KERNEL_ANALYZER_SCRIPT"
 			else
-				printf "${RED}Erro: 'rhel_kernel_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
+				printf "${RED}Erro: 'deb_kernel_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
 				sleep 2
 			fi
 			;;
