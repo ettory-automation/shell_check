@@ -26,7 +26,7 @@ get_mountpoint_details(){
 	printf "\n"
 	local typefs=$(findmnt -n -o FSTYPE --target "$dir_sel")
 	mountpoint "$dir_sel" || true
-	printf "Type: %s\n" "$typefs" # Corrigido para exibir o tipo do filesystem
+	printf "Type: %s\n" "$typefs"
 }
 
 get_dir_details(){
