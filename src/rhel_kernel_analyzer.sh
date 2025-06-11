@@ -54,8 +54,8 @@ get_status_autoupdate_and_updates_rhel(){
         
         printf "${MAGENTA}\n=== Updates Disponíveis (Kernel) ===\n${NC}"
         printf "\n"
-        if dnf check-update kernel 2>/dev/null | grep -q kernel; then
-            dnf check-update kernel 2>/dev/null | grep -i kernel
+        if timeout 10 dnf check-update kernel 2>/dev/null | grep -q kernel; then
+            timeout 10 dnf check-update kernel 2>/dev/null | grep -i kernel || true
         else
             echo -e "${GREEN}Nenhuma atualização de kernel disponível.${NC}"
         fi
@@ -77,8 +77,8 @@ get_status_autoupdate_and_updates_rhel(){
         
         printf "\n${MAGENTA}=== Updates Disponíveis (Kernel) ===\n${NC}"
         printf "\n"
-        if yum check-update kernel 2>/dev/null | grep -q kernel; then
-            yum check-update kernel 2>/dev/null | grep -i kernel
+        if timeout 10 yum check-update kernel 2>/dev/null | grep -q kernel; then
+            timeout 10 yum check-update kernel 2>/dev/null | grep -i kernel || true
         else
             echo -e "${GREEN}Nenhuma atualização de kernel disponível.${NC}"
         fi
