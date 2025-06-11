@@ -14,7 +14,7 @@ select_dir(){
 	fi
 }
 
-get_dir_analyzis(){
+get_dir_analysis(){
 	printf "\n"
 	printf "${MAGENTA}=== Directory Analyzed: ["$dir_sel"] ===${NC}"
 	printf "\n\n"
@@ -41,7 +41,7 @@ get_dir_details(){
 storage_check(){
 	clear
 	select_dir || return
-	get_dir_analyzis
+	get_dir_analysis
 	get_mountpoint_details
 	get_dir_details
 
