@@ -12,6 +12,25 @@ NETWORK_ANALYZER_SCRIPT='../src/network_analyzer.sh'
 RHEL_KERNEL_ANALYZER_SCRIPT='../src/rhel_kernel_analyzer.sh'
 DEB_KERNEL_ANALYZER_SCRIPT='../src/deb_kernel_analyzer.sh'
 
+source ../src/memory_analyzer.sh
+source ../src/cpu_analyzer.sh
+source ../src/storage_analyzer.sh
+source ../src/network_analyzer.sh
+source ../src/rhel_kernel_analyzer.sh
+source ../src/deb_kernel_analyzer.sh
+
+check_and_run() {
+    local script_file="$1"
+    local func_name="$2"
+
+    if [[ -f "$script_file" ]]; then
+        "$func_name"
+    else
+        printf "${RED}Erro: '${script_file##*/}' não encontrado ou sem permissão de leitura.${NC}\n"
+        sleep 2
+    fi
+}
+
 while true; do
         clear
         printf "%b\n" "${MAGENTA}           ###               ###     ###                ###                        ###${NC}"
@@ -37,60 +56,13 @@ while true; do
         read -p "Select an option: " option
 
         case $option in
-                1)
-                        if [[ -f "$MEMORY_ANALYZER_SCRIPT" ]]; then
-                                sudo bash "$MEMORY_ANALYZER_SCRIPT"
-                        else
-                                printf "${RED}Erro: 'memory_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
-                                sleep 2
-                        fi
-                        ;;
-		2)
-			if [[ -f "$CPU_ANALYZER_SCRIPT" ]]; then
-				sudo bash "$CPU_ANALYZER_SCRIPT"
-			else
-				printf "${RED}Erro: 'cpu_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
-				sleep 2
-			fi
-			;;
-		3)
-			if [[ -f "$STORAGE_ANALYZER_SCRIPT" ]]; then
-				sudo bash "$STORAGE_ANALYZER_SCRIPT"
-			else
-				printf "${RED}Erro: 'storage_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
-				sleep 2
-			fi
-			;;
-		4)
-			if [[ -f "$NETWORK_ANALYZER_SCRIPT" ]]; then
-				sudo bash "$NETWORK_ANALYZER_SCRIPT"
-			else
-				printf "${RED}Erro: 'network_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
-				sleep 2
-			fi
-			;;
-		5)
-			if [[ -f "$RHEL_KERNEL_ANALYZER_SCRIPT" ]]; then
-				sudo bash "$RHEL_KERNEL_ANALYZER_SCRIPT"
-			else
-				printf "${RED}Erro: 'rhel_kernel_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
-				sleep 2
-			fi
-			;;
-		6)
-			if [[ -f "$DEB_KERNEL_ANALYZER_SCRIPT" ]]; then
-				sudo bash "$DEB_KERNEL_ANALYZER_SCRIPT"
-			else
-				printf "${RED}Erro: 'deb_kernel_analyzer.sh' não encontrado ou sem permissão de leitura.${NC}"
-				sleep 2
-			fi
-			;;
-                0)
-                        exit
-                        ;;
-                *)
-                        printf "${RED}Opção inválida. Por favor, selecione uma opção válida.${NC}"
-                        sleep 2
-                        ;;
+                1) check_and_run "$MEMORY_ANALYZER_SCRIPT" memory_check ;;
+		2) check_and_run "$CPU_ANALYZER_SCRIPT" cpu_check ;;
+		3) check_and_run "$STORAGE_ANALYZER_SCRIPT" storage_check ;;
+		4) check_and_run "$NETWORK_ANALYZER_SCRIPT" network_check ;; 
+		5) check_and_run "$RHEL_KERNEL_ANALYZER_SCRIPT" rhel_kernel_check ;;
+		6) check_and_run "$DEB_KERNEL_ANALYZER_SCRIPT" deb_kernel_check ;;
+                0) exit ;;
+                *) printf "${RED}Opção inválida. Por favor, selecione uma opção válida.${NC}" ; sleep 2 ;;
         esac
 done

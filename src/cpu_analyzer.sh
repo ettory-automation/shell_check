@@ -5,9 +5,8 @@ GREEN='\033[1;32m'
 RED='\033[1;31m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
-clear
 
-function get_cpu_consumption(){
+get_cpu_consumption(){
 	pids=$(ps -eo pid,%cpu --sort=-%cpu | awk 'NR>1 && $2 >= 70 {print $1}')
 
 	if [[ -n "$pids" ]]; then
@@ -20,7 +19,7 @@ function get_cpu_consumption(){
 	fi
 }
 
-function get_load_average(){
+get_load_average(){
 	colors=$(nproc)
 	read -r load1 load5 load15 <<< $(cut -d " " -f1-3 /proc/loadavg)
 
@@ -39,8 +38,11 @@ function get_load_average(){
 	fi
 }
 
-get_cpu_consumption
-get_load_average
+cpu_check(){
+	clear
+	get_cpu_consumption
+	get_load_average
 
-printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
-read -r
+	printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
+        read -r
+}

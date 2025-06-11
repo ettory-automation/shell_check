@@ -4,9 +4,8 @@ set -euo pipefail
 RED='\033[1;31m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
-clear
 
-function sel_interface(){
+sel_interface(){
 	read -rp "Type Interface: " inet
 	printf "\n"
 	
@@ -24,7 +23,7 @@ function sel_interface(){
 	fi
 }
 
-function set_interval(){
+set_interval(){
 	printf "\n"
 	read -rp "Interval (per sec): " interval
 
@@ -34,7 +33,7 @@ function set_interval(){
 	fi
 }
 
-function get_data_traffic(){
+get_data_traffic(){
 	printf "\n${MAGENTA}=== First Collect [${inet}] ===${NC}\n"
 	first_rx=$(ip -s link show "$inet" | awk '/RX:/{getline; print $1}')
 	first_tx=$(ip -s link show "$inet" | awk '/TX:/{getline; print $1}')
@@ -50,7 +49,7 @@ function get_data_traffic(){
 	printf "${RED}TX (Traffic OUT) ~> $second_tx bytes${NC}\n"
 }
 
-function get_delta_diff_traffic(){
+get_delta_diff_traffic(){
 	printf "\n${MAGENTA}=== Delta Diff Value ===${NC}\n"
 	rx_bytes=$((second_rx - first_rx))
 	tx_bytes=$((second_tx - first_tx))
@@ -62,10 +61,13 @@ function get_delta_diff_traffic(){
 	printf "${RED}TX (Traffic OUT) ~> %.2f Mbps${NC}\n" "$tx_delta_mbps"
 }
 
-sel_interface
-set_interval
-get_data_traffic
-get_delta_diff_traffic
+network_check(){
+	clear
+	sel_interface
+	set_interval
+	get_data_traffic
+	get_delta_diff_traffic
 
-printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
-read -r
+	printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
+	read -r
+}

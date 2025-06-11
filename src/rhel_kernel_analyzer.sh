@@ -5,20 +5,19 @@ GREEN='\033[1;32m'
 RED='\033[1;31m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
-clear
 
-function get_kernel_ver_installed(){
+get_kernel_ver_installed(){
     printf "${MAGENTA}\n=== Kernel Versions Installed ===\n${NC}"
     rpm -q kernel | sort -V | tail -n 3 || true
 }
 
-function get_run_kernel(){
+get_run_kernel(){
     printf "${MAGENTA}\n=== Running Kernel ===\n${NC}"
     printf "\n"
     uname -r
 }
 
-function get_kernel_update_logs(){
+get_kernel_update_logs(){
     printf "${MAGENTA}\n=== Kernel Update Logs ===\n${NC}"
     printf "\n"
     if ls /var/log/dnf.rpm.log* >/dev/null 2>&1; then
@@ -34,7 +33,7 @@ function get_kernel_update_logs(){
     journalctl --since "30 days ago" | grep -Ei 'kernel.*(upgrade|install)' | head -n 10 || true
 }
 
-function get_status_autoupdate_and_updates(){
+get_status_autoupdate_and_updates(){
     printf "${MAGENTA}\n=== Automatic Updates Status ===\n${NC}"
     printf "\n"
     if command -v dnf >/dev/null 2>&1; then
@@ -89,10 +88,13 @@ function get_status_autoupdate_and_updates(){
     fi
 }
 
-get_kernel_ver_installed
-get_run_kernel
-get_kernel_update_logs
-get_status_autoupdate_and_updates
+rhel_kernel_check(){
+	clear
+	get_kernel_ver_installed
+	get_run_kernel
+	get_kernel_update_logs
+	get_status_autoupdate_and_updates
 
-printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
-read -r
+	printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
+	read -r
+}

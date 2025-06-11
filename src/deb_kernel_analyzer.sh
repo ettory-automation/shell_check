@@ -5,24 +5,23 @@ GREEN='\033[1;32m'
 RED='\033[1;31m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
-clear
 
-function get_kernel_ver_installed(){
+get_kernel_ver_installed(){
 	printf "\n${MAGENTA}=== Kernel Versions Installed ===\n${NC}"
 	dpkg --list | grep linux-image | awk '{print $2}' | sort -V | tail -n 3 || true
 }
 
-function get_kernel_run(){
+get_kernel_run(){
 	printf "\n${MAGENTA}=== Running Kernel ===\n${NC}"
 	uname -r
 }
 
-function get_kernel_update_logs(){
+get_kernel_update_logs(){
 	printf "\n${MAGENTA}=== Kernel Update Logs ===\n${NC}"
 	awk '/Start-Date:|Commandline:|Requested-By:|linux-image/ {print}' /var/log/apt/history.log* 2>/dev/null | tail -n 22 || true
 }
 
-function get_status_autoupgrades(){
+get_status_autoupgrades(){
 	printf "\n${MAGENTA}=== Unattended Upgrades Status ===\n${NC}"
 
 	if systemctl list-units --type=service | grep -q "unattended-upgrades.service"; then
@@ -38,10 +37,13 @@ function get_status_autoupgrades(){
 	fi
 }
 
-get_kernel_ver_installed
-get_kernel_run
-get_kernel_update_logs
-get_status_autoupgrades
+deb_kernel_check(){
+	clear
+	get_kernel_ver_installed
+	get_kernel_run
+	get_kernel_update_logs
+	get_status_autoupgrades
 
-printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
-read -r
+	printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
+	read -r
+}
