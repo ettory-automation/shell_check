@@ -8,17 +8,19 @@ NC='\033[0m'
 clear
 
 function get_kernel_ver_installed(){
-    echo "=== Kernel Versions Installed ==="
+    printf "${MAGENTA}\n=== Kernel Versions Installed ===\n${NC}"
     rpm -q kernel | sort -V | tail -n 3 || true
 }
 
 function get_run_kernel(){
-    echo -e "\n=== Running Kernel ==="
+    printf "${MAGENTA}\n=== Running Kernel ===\n${NC}"
+    printf "\n"
     uname -r
 }
 
 function get_kernel_update_logs(){
-    echo -e "\n=== Kernel Update Logs ==="
+    printf "${MAGENTA}\n=== Kernel Update Logs ===\n${NC}"
+    printf "\n"
     if ls /var/log/dnf.rpm.log* >/dev/null 2>&1; then
         grep -i kernel /var/log/dnf.rpm.log* 2>/dev/null | tail -n 20 || echo "Nenhum log de atualização do kernel encontrado."
     elif ls /var/log/yum.log* >/dev/null 2>&1; then
@@ -27,12 +29,14 @@ function get_kernel_update_logs(){
         echo "Nenhum log de atualização do kernel encontrado."
     fi
 
-    echo -e "\n=== Kernel Update Journal ==="
+    printf "${MAGENTA}\n=== Kernel Update Journal ===\n${NC}"
+    printf "\n"
     journalctl --since "30 days ago" | grep -Ei 'kernel.*(upgrade|install)' | head -n 10 || true
 }
 
 function get_status_autoupdate_and_updates(){
-    echo -e "\n=== Automatic Updates Status ==="
+    printf "${MAGENTA}\n=== Automatic Updates Status ===\n${NC}"
+    printf "\n"
     if command -v dnf >/dev/null 2>&1; then
         if systemctl list-units --type=service | grep -q dnf-automatic.timer; then
             if systemctl is-active --quiet dnf-automatic.timer; then
@@ -44,13 +48,19 @@ function get_status_autoupdate_and_updates(){
             fi
         else
             echo -e "${RED}Desabilitado.${NC}"
+            printf "\n"
             echo -e "\nÚltimos logs de atualização manual:"
             journalctl -u dnf-automatic.timer -n 5 --no-pager || true
         fi
         
-        echo -e "\n=== Updates Disponíveis (Kernel) ==="
-        dnf check-update kernel 2>/dev/null
-
+        printf "${MAGENTA}\n=== Updates Disponíveis (Kernel) ===\n${NC}"
+        printf "\n"
+        if dnf check-update kernel 2>/dev/null | grep -q kernel; then
+            dnf check-update kernel 2>/dev/null | grep -i kernel
+        else
+            echo -e "${GREEN}Nenhuma atualização de kernel disponível.${NC}"
+        fi
+        
     elif command -v yum >/dev/null 2>&1; then
         if systemctl list-units --type=service | grep -q yum-cron.service; then
             if systemctl is-active --quiet yum-cron.service; then
@@ -66,8 +76,14 @@ function get_status_autoupdate_and_updates(){
             journalctl -u yum-cron.service -n 5 --no-pager || true
         fi
         
-        echo -e "\n=== Updates Disponíveis (Kernel) ==="
-        yum check-update kernel 2>/dev/null
+        printf "\n${MAGENTA}=== Updates Disponíveis (Kernel) ===\n${NC}"
+        printf "\n"
+        if yum check-update kernel 2>/dev/null | grep -q kernel; then
+            yum check-update kernel 2>/dev/null | grep -i kernel
+        else
+            echo -e "${GREEN}Nenhuma atualização de kernel disponível.${NC}"
+        fi
+        
     else
         echo -e "\nGerenciador de pacotes DNF ou YUM não encontrado. Não foi possível checar atualizações."
     fi
