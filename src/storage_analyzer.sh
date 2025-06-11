@@ -10,7 +10,7 @@ select_dir(){
 
 	if [ ! -e "$dir_sel" ]; then
    		printf "\n${RED}Path inválido ou inexistente.${NC}\n"
-    		exit 1
+    		return 1
 	fi
 }
 
@@ -37,7 +37,7 @@ get_dir_details(){
 
 storage_check(){
 	clear
-	select_dir
+	select_dir || return
 	get_dir_analyzis
 	get_mountpoint_details
 	get_dir_details
