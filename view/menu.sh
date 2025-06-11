@@ -48,8 +48,8 @@ while true; do
         echo "2) CPU Check-in"
         echo "3) Storage/Disk Check-in"
         echo "4) Network Interface Check-in"
-        echo "5) RHEL-like: Kernel Analyzis"
-        echo "6) Debian-like: Kernel Analyzis"
+        echo "5) RHEL-like: Kernel Analysis"
+        echo "6) Debian-like: Kernel Analysis"
         echo "0) Exit"
 
         printf "\n"
