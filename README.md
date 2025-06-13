@@ -13,7 +13,13 @@ unzip shell_check.zip
 cd shell_check-main
 ```
 
-3. Execute o arquivo nomeado como `menu.sh`:
+3. Modifique as permissões do arquivo menu.sh dentro do diretório /view:
+
+```
+chmod +x ./view/menu.sh
+```
+
+4. Execute o arquivo nomeado como `menu.sh`:
 
 ```bash
 cd view
