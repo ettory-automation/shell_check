@@ -20,22 +20,40 @@ get_cpu_consumption(){
 }
 
 get_load_average(){
-	colors=$(nproc)
-	read -r load1 load5 load15 <<< $(cut -d " " -f1-3 /proc/loadavg)
-
+	cores=$(nproc)
+	load1=$(awk '{print $1}' /proc/loadavg)
+	load5=$(awk '{print $2}' /proc/loadavg)
+	load15=$(awk '{print $3}' /proc/loadavg)
+	
 	printf "\n%b\n" "${MAGENTA}=== Load Average (1, 5, 15 min) ===${NC}"
 	printf "\n"
-	printf "%b\n" "CPUs disponíveis: $colors"
+	printf "%b\n" "CPUs disponíveis: $cores"
 	printf "1min:  %.2f\n5min:  %.2f\n15min: %.2f\n" "$load1" "$load5" "$load15"
-
-	if (( $(echo "$load1 > $colors" | bc -l) )); then
-    	printf "%b\n" "${RED}ALERTA: Load de 1 minuto acima do número de núcleos!${NC}"
-	elif (( $(echo "$load1 > $colors * 0.7" | bc -l) )); then
-    	printf "%b\n" "${MAGENTA}Atenção: Load de 1 minuto está acima de 70%% da capacidade total.${NC}"
-	else
-    	printf "\n"
-		printf "%b\n" "${GREEN}Load Average dentro do normal.${NC}"
-	fi
+	
+	alert=$(awk -v l="$load1" -v c="$cores" '
+	BEGIN {
+	    if (l > c) {
+		print "critical"
+	    } else if (l > (c * 0.7)) {
+		print "warning"
+	    } else {
+		print "ok"
+	    }
+	}'
+	)
+	
+	case "$alert" in
+	critical)
+	    printf "%b\n" "${RED}ALERTA: Load de 1 minuto acima do número de núcleos!${NC}"
+	    ;;
+	warning)
+	    printf "%b\n" "${MAGENTA}Atenção: Load de 1 minuto está acima de 70%% da capacidade total.${NC}"
+	    ;;
+	ok)
+	    printf "\n"
+	    printf "%b\n" "${GREEN}Load Average dentro do normal.${NC}"
+	    ;;
+	esac
 }
 
 cpu_check(){
