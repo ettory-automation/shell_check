@@ -21,14 +21,13 @@ get_cpu_consumption(){
 
 get_load_average(){
 	cores=$(nproc)
-	load1=$(awk '{print $1}' /proc/loadavg)
-	load5=$(awk '{print $2}' /proc/loadavg)
-	load15=$(awk '{print $3}' /proc/loadavg)
+	
+	read load1 load5 load15 < <(cut -d ' ' -f1-3 /proc/loadavg | sed 's/,/./g')
 	
 	printf "\n%b\n" "${MAGENTA}=== Load Average (1, 5, 15 min) ===${NC}"
 	printf "\n"
 	printf "%b\n" "CPUs disponíveis: $cores"
-	printf "1min:  %.2f\n5min:  %.2f\n15min: %.2f\n" "$load1" "$load5" "$load15"
+	LC_NUMERIC=C printf "1min:  %.2f\n5min:  %.2f\n15min: %.2f\n" "$load1" "$load5" "$load15"
 	
 	alert=$(awk -v l="$load1" -v c="$cores" '
 	BEGIN {
@@ -44,10 +43,10 @@ get_load_average(){
 	
 	case "$alert" in
 	critical)
-	    printf "%b\n" "${RED}ALERTA: Load de 1 minuto acima do número de núcleos!${NC}"
+	    printf "%b\n" "${RED}\nALERTA: Load de 1 minuto acima do número de núcleos!\n${NC}"
 	    ;;
 	warning)
-	    printf "%b\n" "${MAGENTA}Atenção: Load de 1 minuto está acima de 70%% da capacidade total.${NC}"
+	    printf "%b\n" "${MAGENTA}\nAtenção: Load de 1 minuto está acima de 70%% da capacidade total.\n${NC}"
 	    ;;
 	ok)
 	    printf "\n"
