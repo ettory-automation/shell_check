@@ -13,7 +13,9 @@ sel_interface(){
 	while true; do
 		ip -c a | awk '
 			/^[0-9]+: / {
-				iface=$2; sub(":", "", iface);\
+				iface=$2; sub(":", "", iface);
+    				# Exclui a interface de loopback "lo"
+    				if (iface == "lo") next;
 			}
 			
 			/link\/ether/ {
