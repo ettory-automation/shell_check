@@ -60,7 +60,8 @@ show_menu(){
                 echo "0) Exit"
 
                 printf "\n"
-                read -rp "Select an option: " option
+                printf "${MAGENTA}[*] Select an option: ${NC}"
+                read -r option
 
                 case $option in
                         1) check_and_run "$MEMORY_ANALYZER_SCRIPT" memory_check || continue ;;
