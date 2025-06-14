@@ -75,7 +75,7 @@ sel_interface(){
 
 			while true; do
 				printf "\n${MAGENTA}Voltar ao menu? (S/n): ${NC}" 
-                read -r choice
+                		read -r choice
 
 				choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
 
