@@ -133,8 +133,8 @@ get_delta_diff_traffic(){
 	rx_bytes=$((second_rx - first_rx))
 	tx_bytes=$((second_tx - first_tx))
 
-	rx_delta_mbps=$(echo "scale=2; ($rx_bytes * 8) / ($interval * 1000000)" | bc)
-	tx_delta_mbps=$(echo "scale=2; ($tx_bytes * 8) / ($interval * 1000000)" | bc)
+	rx_delta_mbps=$(awk "BEGIN { printf \"%.2f\", ($rx_bytes * 8) / ($interval * 1000000) }")
+	tx_delta_mbps=$(awk "BEGIN { printf \"%.2f\", ($tx_bytes * 8) / ($interval * 1000000) }")
 
 	printf "${RED}RX (Traffic IN)  ~> %.2f Mbps${NC}\n" "$rx_delta_mbps"
 	printf "${RED}TX (Traffic OUT) ~> %.2f Mbps${NC}\n" "$tx_delta_mbps"
