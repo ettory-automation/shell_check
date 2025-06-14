@@ -5,25 +5,6 @@ RED='\033[1;31m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
 
-# sel_interface(){
-# 	clear
-# 	read -rp "Type Interface: " inet
-	
-# 	if [ ! -e "$inet" ]; then
-# 		ip link show "$inet" || { 
-# 			printf "\n${RED}Interface selecionada não existe!${NC}\n"
-# 			exit 1
-# 		}
-
-# 		state=$(cat /sys/class/net/$inet/operstate)
-# 		if [[ "$state" != "up" ]]; then
-# 			printf "\n"
-# 			printf "${RED}Interface existe, mas está DOWN.${NC}\n"
-# 			exit 1
-# 		fi
-# 	fi
-# }
-
 sel_interface(){
 	local input_inet
 	local choice
