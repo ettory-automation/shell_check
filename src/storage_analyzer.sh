@@ -51,7 +51,7 @@ get_dir_analysis(){
 get_mountpoint_details(){
 	printf "\n${MAGENTA}=== Mountpoint's System Data ["$dir_sel"] ===\n${NC}"
 	printf "\n"
-	local typefs=$(findmnt -n -o FSTYPE --target "$dir_sel")
+	local typefs=$(findmnt -n -o FSTYPE --target "$dir_sel" || true)
 	mountpoint "$dir_sel" || true
 	printf "Type: %s\n" "$typefs"
 }
