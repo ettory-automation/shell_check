@@ -9,26 +9,41 @@ sel_interface(){
 	local input_inet
 	local choice
 
-
 	while true; do
-		ip -c a | awk '
-			/^[0-9]+: / {
-				iface=$2; sub(":", "", iface);
-    				# Exclui a interface de loopback "lo"
-    				if (iface == "lo") next;
+		ip a | awk '
+			BEGIN {
+				printf "\n%-10s %-16s %-20s %-16s\n", "Interface", "IP Address", "MAC Address", "Broadcast";
+				print  "-------------------------------------------------------------------------------";
 			}
-			
-			/link\/ether/ {
-				mac=$2;
-			}
-			
-			/inet / && !/inet6/ {
-			split($2, ip, "/");
-			broadcast=$4;
-			printf "%-12s %-15s %-17s %-15s\n", iface, ip[1], mac, broadcast;
-			}
-		' | column -t -s ' ' && printf "${NC}"
 
+			{
+				if ($1 ~ /^[0-9]+:/) {
+					iface = $2;
+					sub(":", "", iface);
+					skip = (iface == "lo") ? 1 : 0;
+					mac = "";
+					ip = "";
+					broadcast = "";
+				}
+
+				if ($1 == "link/ether" && !skip) {
+					mac = $2;
+				}
+
+				if ($1 == "inet" && !skip && $2 !~ /inet6/) {
+					split($2, ip_parts, "/");
+					ip = ip_parts[1];
+					broadcast = $4;
+
+					# Só imprime a linha quando possuir IP + MAC (exlusão de inet "lo")
+					if (ip != "" && mac != "") {
+						printf "%-10s %-16s %-20s %-16s\n", iface, ip, mac, broadcast;
+					}
+				}
+			}
+		'
+
+		printf "${NC}"
 		printf "\n"
 		read -rp "[*] Type Network Interface: " input_inet
 
