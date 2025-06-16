@@ -10,14 +10,13 @@ curl -L -o shell_check.zip https://github.com/ettorydevops/shell_check/archive/r
 
 ```bash
 unzip shell_check.zip
-cd shell_check-main
+cd shell_check-main/view
 ```
 
 3. Modifique as permissões do arquivo menu.sh dentro do diretório /view:
 
 ```
-chmod +x view/menu.sh
-cd view
+chmod +x menu.sh
 ```
 
 4. Execute o arquivo nomeado como `menu.sh`:
