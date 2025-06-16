@@ -72,7 +72,9 @@ get_io_details(){
 }
 
 set_interval_bits(){
-    read -rp "[*] Limite de I/O (ex: 1G, 1M, 1k ou bytes): " input
+	printf "\n${MAGENTA}=== Results ===${NC}\n"
+ 	printf "\n"
+    read -rp "[*] Limite de I/O (ex: 1G, 1M, 1K ou bytes): " input
 
     # Expressão regex para extrair número e unidade (case insensitive)
     if [[ "$input" =~ ^([0-9]+)([KMG]?)$ ]]; then
