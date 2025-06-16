@@ -1,7 +1,6 @@
 #!/bin/bash
 set -eou pipefail
 
-RED='\033[1;31m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
 

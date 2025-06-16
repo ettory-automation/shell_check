@@ -11,6 +11,7 @@ STORAGE_ANALYZER_SCRIPT='../src/storage_analyzer.sh'
 NETWORK_ANALYZER_SCRIPT='../src/network_analyzer.sh'
 RHEL_KERNEL_ANALYZER_SCRIPT='../src/rhel_kernel_analyzer.sh'
 DEB_KERNEL_ANALYZER_SCRIPT='../src/deb_kernel_analyzer.sh'
+IO_DISK_ANALYZER_SCRIPT='../src/io_disk_analyzer.sh'
 
 source ../src/memory_analyzer.sh
 source ../src/cpu_analyzer.sh
@@ -18,6 +19,7 @@ source ../src/storage_analyzer.sh
 source ../src/network_analyzer.sh
 source ../src/rhel_kernel_analyzer.sh
 source ../src/deb_kernel_analyzer.sh
+source ../src/io_disk_analyzer.sh
 
 check_and_run() {
     local script_file="$1"
@@ -54,9 +56,10 @@ show_menu(){
                 echo "1) Memory Check-in"
                 echo "2) CPU Check-in"
                 echo "3) Storage/Disk Check-in"
-                echo "4) Network Interface Check-in"
-                echo "5) RHEL-like: Kernel Analysis"
-                echo "6) Debian-like: Kernel Analysis"
+                echo "4) I/O Disk Check-in"
+                echo "5) Network Interface Check-in"
+                echo "6) RHEL-like: Kernel Analysis"
+                echo "7) Debian-like: Kernel Analysis"
                 echo "0) Exit"
 
                 printf "\n"
@@ -67,9 +70,10 @@ show_menu(){
                         1) check_and_run "$MEMORY_ANALYZER_SCRIPT" memory_check || continue ;;
                         2) check_and_run "$CPU_ANALYZER_SCRIPT" cpu_check || continue ;;
                         3) check_and_run "$STORAGE_ANALYZER_SCRIPT" storage_check || continue ;;
-                        4) check_and_run "$NETWORK_ANALYZER_SCRIPT" network_check || continue ;; 
-                        5) check_and_run "$RHEL_KERNEL_ANALYZER_SCRIPT" rhel_kernel_check || continue ;;
-                        6) check_and_run "$DEB_KERNEL_ANALYZER_SCRIPT" deb_kernel_check || continue ;;
+                        4) check_and_run "$IO_DISK_ANALYZER_SCRIPT" io_disk_check || continue ;;
+                        5) check_and_run "$NETWORK_ANALYZER_SCRIPT" network_check || continue ;; 
+                        6) check_and_run "$RHEL_KERNEL_ANALYZER_SCRIPT" rhel_kernel_check || continue ;;
+                        7) check_and_run "$DEB_KERNEL_ANALYZER_SCRIPT" deb_kernel_check || continue ;;
                         0) exit ;;
                         *) printf "${RED}Opção inválida. Por favor, selecione uma opção válida.${NC}" ; sleep 1 ;;
                 esac
