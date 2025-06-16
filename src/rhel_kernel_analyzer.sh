@@ -54,7 +54,7 @@ get_status_autoupdate_and_updates_rhel(){
         
         printf "${MAGENTA}\n=== Updates Disponíveis (Kernel) ===\n${NC}"
         printf "\n"
-	# Teste de remoção da flag de timeout com valor 10 para verificação com assertividade
+
         if dnf check-update kernel 2>/dev/null | grep -q kernel; then
             dnf check-update kernel 2>/dev/null | grep -i kernel || true
         else
