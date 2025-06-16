@@ -19,7 +19,7 @@ cd shell_check-main/view
 chmod +x menu.sh
 ```
 
-4. Execute o arquivo nomeado como `menu.sh`:
+4. Execute o arquivo nomeado como `menu.sh` (altamente recomendado utilização de `sudo`):
 
 ```bash
 ./menu.sh
