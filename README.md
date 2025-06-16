@@ -16,12 +16,12 @@ cd shell_check-main
 3. Modifique as permissões do arquivo menu.sh dentro do diretório /view:
 
 ```
-chmod +x ./view/menu.sh
+chmod +x view/menu.sh
+cd view
 ```
 
 4. Execute o arquivo nomeado como `menu.sh`:
 
 ```bash
-cd view
 ./menu.sh
 ```
