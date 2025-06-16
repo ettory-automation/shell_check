@@ -72,7 +72,7 @@ get_io_details(){
 }
 
 set_interval_bits(){
-    read -rp "Limite de I/O (ex: 100M, 50k, 1G ou bytes): " input
+    read -rp "[*] Limite de I/O (ex: 100M, 50k, 1G ou bytes): " input
 
     # Expressão regex para extrair número e unidade (case insensitive)
     if [[ "$input" =~ ^([0-9]+)([KMG]?)$ ]]; then
