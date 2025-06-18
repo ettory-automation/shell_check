@@ -82,6 +82,7 @@ set_interval_bits(){
         unit=${BASH_REMATCH[2],,}  # para minúsculo
     else
         printf "${RED}Valor inválido. Use formato numérico com opcional K, M ou G.${NC}\n"
+	sleep 2
         printf "\n"
         return 1
     fi
