@@ -15,7 +15,7 @@ get_cpu_consumption(){
 	else
     		printf "%b\n" "${MAGENTA}=== Processes Running: Above 70% (CPU) ===${NC}"
 			printf "\n"
-    		printf "%b\n" "${GREEN}Nenhum processo está consumindo mais de 70%% de CPU${NC}"
+    		printf "%b\n" "${GREEN}Nenhum processo está consumindo mais de 70% de CPU${NC}"
 	fi
 }
 
