@@ -46,7 +46,7 @@ get_load_average(){
 	    printf "%b\n" "${RED}\nALERTA: Load de 1 minuto acima do número de núcleos!\n${NC}"
 	    ;;
 	warning)
-	    printf "%b\n" "${MAGENTA}\nAtenção: Load de 1 minuto está acima de 70%% da capacidade total.\n${NC}"
+	    printf "%b\n" "${MAGENTA}\nAtenção: Load de 1 minuto está acima de 70% da capacidade total.\n${NC}"
 	    ;;
 	ok)
 	    printf "\n"
