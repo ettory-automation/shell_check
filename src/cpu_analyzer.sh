@@ -27,6 +27,7 @@ get_load_average(){
 	printf "\n%b\n" "${MAGENTA}=== Load Average (1, 5, 15 min) ===${NC}"
 	printf "\n"
 	printf "%b\n" "CPUs disponíveis: $cores"
+ 	printf "\n"
 	LC_NUMERIC=C printf "1min:  %.2f\n5min:  %.2f\n15min: %.2f\n" "$load1" "$load5" "$load15"
 	
 	alert=$(awk -v l="$load1" -v c="$cores" '
