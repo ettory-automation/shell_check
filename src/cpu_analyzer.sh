@@ -11,6 +11,7 @@ get_cpu_consumption(){
 
 	if [[ -n "$pids" ]]; then
     		printf "%b\n" "${MAGENTA}=== Processes Running: Above 70% (CPU) ===${NC}"
+      		printf "\n"
     		ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | awk -v pids="$pids" 'NR==1 || index(" "pids" ", " "$1" ")'
 	else
     		printf "%b\n" "${MAGENTA}=== Processes Running: Above 70% (CPU) ===${NC}"
