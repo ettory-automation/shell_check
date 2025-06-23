@@ -121,7 +121,7 @@ get_status_processes(){
 	printf "\n"
     printf "%b\n" "${MAGENTA}=== Status dos Processos ===${NC}"
 
-	local OLD_LC_ALL="$LC_ALL"
+	local OLD_LC_ALL="${LC_ALL:-}"
 	export LC_ALL=C
 
 	local ps_output=''
