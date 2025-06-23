@@ -143,8 +143,8 @@ get_status_processes(){
     declare -A foreground_group_procs
 
 	while IFS= read -r line; do
-		read -r stat pid user comm <<< "$(echo "$line" | awk '{print $1, $2, $3, substr($0, index($0,$4))}')"
-		
+		read -r stat pid user comm <<< "$(awk '{print $1, $2, $3, substr($0, index($0,$4))}' <<< "$line")" || true
+
 		local main_status="${stat:0:1}"
 		local formatted_line=$(format_process_line "$pid" "$user" "$comm")
 
@@ -183,9 +183,11 @@ get_status_processes(){
         
         if [[ ${#procs_ref[@]} -gt 0 ]]; then
             printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
+			set +u
             for pid_key in "${!procs_ref[@]}"; do
                 printf "%s\n" "${procs_ref[$pid_key]}"
             done | sort # Ordena por Process ID
+			set -u
         fi
     }
 
