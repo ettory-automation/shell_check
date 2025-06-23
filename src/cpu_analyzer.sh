@@ -121,10 +121,10 @@ print_process_block() {
         local title="$1"
 		local array_name="${2:-}"
 
-		if [[ -z "${array_name+x}" ]]; then
-        	echo "Erro interno: array não definido para '$title'" >&2
-        	return 1
-    	fi
+		if [[ -z "$array_name" || ! "$(declare -p "$array_name" 2>/dev/null)" =~ "declare -A" ]]; then
+    		echo "Erro interno: array associativo '$array_name' não existe ou não é um array válido." >&2
+	  		return 1
+		fi
 
         local -n procs_ref="$array_name" # Referência ao array associativo
 		
