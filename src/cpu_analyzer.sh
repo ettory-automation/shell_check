@@ -178,25 +178,23 @@ get_status_processes(){
 
 	print_process_block() {
         local title="$1"
-		
-  		if [[ -z "${2:-}" ]]; then
+		local array_name="${2:-}"
+
+		if [[ -z "$array_name" ]]; then
         	echo "Erro interno: array não definido para '$title'" >&2
-        	return
+        	return 1
     	fi
 
-		set +u
-		local array_name="$2"
+   		set +u
         local -n procs_ref="$array_name" # Referência ao array associativo
-        
+		set -u
+		
         if [[ ${#procs_ref[@]} -gt 0 ]]; then
             printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
-			set +u
             for pid_key in "${!procs_ref[@]}"; do
                 printf "%s\n" "${procs_ref[$pid_key]}"
             done | sort # Ordena por Process ID
-			set -u
         fi
-		set -u
     }
 
 	# Status principais
