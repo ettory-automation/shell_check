@@ -1,12 +1,13 @@
 #!/bin/bash
-set -eou pipefail
-export LC_ALL=
+set -eou pipefail 
 
 GREEN='\033[1;32m'
 RED='\033[1;31m'
 MAGENTA='\033[1;35m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
+
+procs_ref=''
 
 get_cpu_consumption(){
     pids=$(ps -eo pid,%cpu --sort=-%cpu | awk 'NR>1 && $2 >= 70 {print $1}')
@@ -123,6 +124,9 @@ get_status_processes(){
 	printf "\n"
     printf "%b\n" "${MAGENTA}=== Status dos Processos ===${NC}"
 
+	local OLD_LC_ALL="$LC_ALL"
+	export LC_ALL=C
+
 	local ps_output=''
 	ps_output=$(ps -eo stat,pid,user,comm --no-headers --width 200)
 
@@ -178,7 +182,7 @@ get_status_processes(){
 	print_process_block() {
         local title="$1"
         shift
-        local -n procs_ref="$1" # Referência ao array associativo
+        procs_ref="$1" # Referência ao array associativo
         
         if [[ ${#procs_ref[@]} -gt 0 ]]; then
             printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
@@ -215,8 +219,9 @@ get_status_processes(){
         done
     fi
 
-	
-    printf "\n"	
+    printf "\n"
+
+	export LC_ALL="$OLD_LC_ALL"
 }
 
 get_load_average(){
