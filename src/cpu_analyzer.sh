@@ -143,6 +143,7 @@ get_status_processes(){
     declare -A foreground_group_procs
 
  	declare -A other_procs
+  	declare -A procs_ref
 
 	while IFS= read -r line; do
 		read -r stat pid user comm <<< "$(awk '{print $1, $2, $3, substr($0, index($0,$4))}' <<< "$line")" || true
@@ -182,7 +183,7 @@ get_status_processes(){
         local title="$1"
 		local array_name="${2:-}"
 
-		if [[ -z "${array_name}+x" ]]; then
+		if [[ -z "${array_name+x}" ]]; then
         	echo "Erro interno: array não definido para '$title'" >&2
         	return 1
     	fi
