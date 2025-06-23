@@ -187,9 +187,7 @@ get_status_processes(){
         	return 1
     	fi
 
-   		set +u
         local -n procs_ref="$array_name" # Referência ao array associativo
-		set -u
 		
         if [[ ${#procs_ref[@]} -gt 0 ]]; then
             printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
