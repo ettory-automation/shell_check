@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eou pipefail 
+set -eo pipefail 
 
 GREEN='\033[1;32m'
 RED='\033[1;31m'
@@ -141,6 +141,8 @@ get_status_processes(){
     declare -A session_leader_procs
     declare -A multi_threaded_procs
     declare -A foreground_group_procs
+
+ 	declare -A other_procs
 
 	while IFS= read -r line; do
 		read -r stat pid user comm <<< "$(awk '{print $1, $2, $3, substr($0, index($0,$4))}' <<< "$line")" || true
