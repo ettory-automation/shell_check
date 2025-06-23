@@ -27,7 +27,7 @@ read_cpu_stats(){
 
 get_consumption_per_core(){
     printf "\n"
-    printf "%b\n" "${MAGENTA}=== Consumo de CPU por Núcleo ===${NC}"
+    printf "%b\n" "${MAGENTA}=== Consumo de CPU por Core ===${NC}"
 	printf "\n"
     
     printf "%-10s %-10s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s\n" \
@@ -253,7 +253,7 @@ get_load_average(){
     
     case "$alert" in
     critical)
-        printf "%b\n" "${RED}\nCRITICAL: Load de 1 minuto acima do número de núcleos!\n${NC}"
+        printf "%b\n" "${RED}\nCRITICAL: Load de 1 minuto acima do número de cores!\n${NC}"
         ;;
     warning)
         printf "%b\n" "${YELLOW}\nWARNING: Load de 1 minuto está acima de 70% da capacidade total.\n${NC}"
