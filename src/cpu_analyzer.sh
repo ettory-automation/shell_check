@@ -1,5 +1,6 @@
 #!/bin/bash
-set -eou pipefail 
+set -eou pipefail
+export LC_ALL=
 
 GREEN='\033[1;32m'
 RED='\033[1;31m'
