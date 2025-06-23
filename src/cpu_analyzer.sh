@@ -117,6 +117,25 @@ format_process_line(){
     printf "%-8s %-10s %s\n" "$pid" "$user" "$comm"
 }
 
+print_process_block() {
+        local title="$1"
+		local array_name="${2:-}"
+
+		if [[ -z "${array_name+x}" ]]; then
+        	echo "Erro interno: array não definido para '$title'" >&2
+        	return 1
+    	fi
+
+        local -n procs_ref="$array_name" # Referência ao array associativo
+		
+        if [[ ${#procs_ref[@]} -gt 0 ]]; then
+            printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
+            for pid_key in "${!procs_ref[@]}"; do
+                printf "%s\n" "${procs_ref[$pid_key]}"
+            done | sort # Ordena por Process ID
+        fi
+    }
+
 get_status_processes(){
 	printf "\n"
     printf "%b\n" "${MAGENTA}=== Status dos Processos ===${NC}"
@@ -124,8 +143,7 @@ get_status_processes(){
 	local OLD_LC_ALL="${LC_ALL:-}"
 	export LC_ALL=C
 
-	local ps_output=''
-	ps_output=$(ps -eo stat,pid,user,comm --no-headers --width 200)
+	local ps_output=$(ps -eo stat,pid,user,comm --no-headers --width 200)
 
 	declare -A running_procs
     declare -A sleeping_procs
@@ -143,7 +161,6 @@ get_status_processes(){
     declare -A foreground_group_procs
 
  	declare -A other_procs
-  	declare -A procs_ref
 
 	while IFS= read -r line; do
 		read -r stat pid user comm <<< "$(awk '{print $1, $2, $3, substr($0, index($0,$4))}' <<< "$line")" || true
@@ -162,7 +179,7 @@ get_status_processes(){
                if [[ -z "${other_procs[$main_status]+x}" ]]; then
                    other_procs[$main_status]="$formatted_line"
                else
-                   other_procs[$main_status]="${other_procs[$main_status]}\n$formatted_line"
+                   other_procs[$main_status]="${other_procs[$main_status]}$'\n'$formatted_line"
                fi
                ;;
         esac
@@ -178,25 +195,6 @@ get_status_processes(){
         fi
 
     done <<< "$ps_output"
-
-	print_process_block() {
-        local title="$1"
-		local array_name="${2:-}"
-
-		if [[ -z "${array_name+x}" ]]; then
-        	echo "Erro interno: array não definido para '$title'" >&2
-        	return 1
-    	fi
-
-        local -n procs_ref="$array_name" # Referência ao array associativo
-		
-        if [[ ${#procs_ref[@]} -gt 0 ]]; then
-            printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
-            for pid_key in "${!procs_ref[@]}"; do
-                printf "%s\n" "${procs_ref[$pid_key]}"
-            done | sort # Ordena por Process ID
-        fi
-    }
 
 	# Status principais
 	print_process_block "Running (R):" running_procs
