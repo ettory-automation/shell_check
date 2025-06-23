@@ -173,19 +173,15 @@ get_status_processes(){
 		local formatted_line=$(format_process_line "$pid" "$user" "$comm")
 
 		case "$main_status" in
-            R) running_procs[$pid]="$formatted_line" ;;
-            S) sleeping_procs[$pid]="$formatted_line" ;;
-            D) disksleep_procs[$pid]="$formatted_line" ;;
-            Z) zombie_procs[$pid]="$formatted_line" ;;
-            T) stopped_procs[$pid]="$formatted_line" ;;
-            X) dead_procs[$pid]="$formatted_line" ;;
+            R)	running_procs[$pid]="$formatted_line" ;;
+            S)	sleeping_procs[$pid]="$formatted_line" ;;
+            D)	disksleep_procs[$pid]="$formatted_line" ;;
+            Z)	zombie_procs[$pid]="$formatted_line" ;;
+            T)	stopped_procs[$pid]="$formatted_line" ;;
+            X)	dead_procs[$pid]="$formatted_line" ;;
             *)
-               if [[ -z "${other_procs[$main_status]+x}" ]]; then
-                   other_procs[$main_status]="$formatted_line"
-               else
-                   other_procs[$main_status]="${other_procs[$main_status]}$'\n'$formatted_line"
-               fi
-               ;;
+				other_procs[$main_status]+="$formatted_line|"
+    			;;
         esac
 
 		if [[ "${#stat}" -gt 1 ]]; then
@@ -220,12 +216,12 @@ get_status_processes(){
 
     # Outros status não categorizados explicitamente (se houver)
 	if [[ ${#other_procs[@]} -gt 0 ]]; then
-        printf "\n%b--- Outros Status ---%b\n" "${MAGENTA}" "${NC}"
-        for stat_key in "${!other_procs[@]}"; do
-            printf "\nOutro Status (%s):\n" "$stat_key"
-            printf "%s" "${other_procs[$stat_key]}" | sort
-        done
-    fi
+	    printf "\n%b--- Outros Status ---%b\n" "${MAGENTA}" "${NC}"
+	    for stat_key in "${!other_procs[@]}"; do
+	        printf "\nOutro Status (%s):\n" "$stat_key"
+	        echo "${other_procs[$stat_key]}" | tr '|' '\n' | sort
+	    done
+	fi
 
     printf "\n"
 
