@@ -183,7 +183,8 @@ get_status_processes(){
         	echo "Erro interno: array não definido para '$title'" >&2
         	return
     	fi
-	 
+
+		set +u
 		local array_name="$2"
         local -n procs_ref="$array_name" # Referência ao array associativo
         
@@ -195,6 +196,7 @@ get_status_processes(){
             done | sort # Ordena por Process ID
 			set -u
         fi
+		set -u
     }
 
 	# Status principais
