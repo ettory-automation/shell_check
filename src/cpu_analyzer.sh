@@ -182,7 +182,7 @@ get_status_processes(){
         local title="$1"
 		local array_name="${2:-}"
 
-		if [[ -z "$array_name+x" ]]; then
+		if [[ -z "${array_name}+x" ]]; then
         	echo "Erro interno: array não definido para '$title'" >&2
         	return 1
     	fi
