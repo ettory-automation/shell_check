@@ -158,7 +158,7 @@ get_status_processes(){
             T) stopped_procs[$pid]="$formatted_line" ;;
             X) dead_procs[$pid]="$formatted_line" ;;
             *)
-               if [[ -z "${other_procs[$main_status]}" ]]; then
+               if [[ -z "${other_procs[$main_status]+x}" ]]; then
                    other_procs[$main_status]="$formatted_line"
                else
                    other_procs[$main_status]="${other_procs[$main_status]}\n$formatted_line"
@@ -182,7 +182,7 @@ get_status_processes(){
         local title="$1"
 		local array_name="${2:-}"
 
-		if [[ -z "$array_name" ]]; then
+		if [[ -z "$array_name+x" ]]; then
         	echo "Erro interno: array não definido para '$title'" >&2
         	return 1
     	fi
