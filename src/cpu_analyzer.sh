@@ -178,8 +178,7 @@ get_status_processes(){
 
 	print_process_block() {
         local title="$1"
-        shift
-        procs_ref="$1" # Referência ao array associativo
+        local -n procs_ref="$1" # Referência ao array associativo
         
         if [[ ${#procs_ref[@]} -gt 0 ]]; then
             printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
