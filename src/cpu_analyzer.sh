@@ -117,33 +117,27 @@ format_process_line(){
     printf "%-8s %-10s %s\n" "$pid" "$user" "$comm"
 }
 
-print_process_block() {
+print_process_block(){
     local title="$1"
     local array_name="$2"
 
-    if [[ -z "${array_name}" ]]; then
+    if [[ -z "$array_name" ]]; then
         echo -e "${RED}Erro: Nome do array não fornecido para '$title'.${NC}" >&2
         return 1
     fi
 
-    if ! declare -p "$array_name" &>/dev/null; then
-        echo -e "${RED}Erro: Array '$array_name' não existe.${NC}" >&2
-        return 1
+    # Verifica se o array existe
+    if ! eval "[[ \${#$array_name[@]} -gt 0 ]]" 2>/dev/null; then
+        return 0
     fi
 
-    if [[ "$(declare -p "$array_name" 2>/dev/null)" != "declare -A "* ]]; then
-        echo -e "${RED}Erro: '$array_name' não é um array associativo.${NC}" >&2
-        return 1
-    fi
+    printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
 
-    local -n procs_ref="$array_name"
-
-    if [[ ${#procs_ref[@]} -gt 0 ]]; then
-        printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
-        for pid_key in "${!procs_ref[@]}"; do
-            printf "%s\n" "${procs_ref[$pid_key]}"
-        done | sort
-    fi
+    # Imprime os valores ordenados pelas chaves (PID)
+    local key
+    eval "for key in \"\${!$array_name[@]}\"; do
+        printf '%s\n' \"\${$array_name[\$key]}\"
+    done" | sort
 }
 
 get_status_processes(){
