@@ -7,8 +7,6 @@ MAGENTA='\033[1;35m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-procs_ref=''
-
 get_cpu_consumption(){
     pids=$(ps -eo pid,%cpu --sort=-%cpu | awk 'NR>1 && $2 >= 70 {print $1}')
 
@@ -36,7 +34,6 @@ get_consumption_per_core(){
            "timestamp" "core" "%usr" "%nice" "%sys" "%idle" "%iowait" "%irq" "%soft" "%total"
     
     echo "-------------------------------------------------------------------------------------------"
-
 
     local prev_stats=$(read_cpu_stats)
 
