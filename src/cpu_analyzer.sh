@@ -118,23 +118,33 @@ format_process_line(){
 }
 
 print_process_block() {
-        local title="$1"
-		local array_name="${2:-}"
+    local title="$1"
+    local array_name="$2"
 
-		if [[ -z "$array_name" || ! "$(declare -p "$array_name" 2>/dev/null)" =~ "declare -A" ]]; then
-    		echo "Erro interno: array associativo '$array_name' não existe ou não é um array válido." >&2
-	  		return 1
-		fi
+    if [[ -z "${array_name}" ]]; then
+        echo -e "${RED}Erro: Nome do array não fornecido para '$title'.${NC}" >&2
+        return 1
+    fi
 
-        local -n procs_ref="$array_name" # Referência ao array associativo
-		
-        if [[ ${#procs_ref[@]} -gt 0 ]]; then
-            printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
-            for pid_key in "${!procs_ref[@]}"; do
-                printf "%s\n" "${procs_ref[$pid_key]}"
-            done | sort # Ordena por Process ID
-        fi
-    }
+    if ! declare -p "$array_name" &>/dev/null; then
+        echo -e "${RED}Erro: Array '$array_name' não existe.${NC}" >&2
+        return 1
+    fi
+
+    if [[ "$(declare -p "$array_name" 2>/dev/null)" != "declare -A "* ]]; then
+        echo -e "${RED}Erro: '$array_name' não é um array associativo.${NC}" >&2
+        return 1
+    fi
+
+    local -n procs_ref="$array_name"
+
+    if [[ ${#procs_ref[@]} -gt 0 ]]; then
+        printf "\n%b%s%b\n" "${MAGENTA}" "$title" "${NC}"
+        for pid_key in "${!procs_ref[@]}"; do
+            printf "%s\n" "${procs_ref[$pid_key]}"
+        done | sort
+    fi
+}
 
 get_status_processes(){
 	printf "\n"
