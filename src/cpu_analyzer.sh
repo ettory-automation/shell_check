@@ -219,11 +219,11 @@ get_status_processes(){
     print_process_block "Foreground Process Group (+):" foreground_group_procs
 
     # Outros status não categorizados explicitamente (se houver)
-    if [[ ${#other_procs[@]} -gt 0 ]]; then
+	if [[ ${#other_procs[@]} -gt 0 ]]; then
         printf "\n%b--- Outros Status ---%b\n" "${MAGENTA}" "${NC}"
         for stat_key in "${!other_procs[@]}"; do
             printf "\nOutro Status (%s):\n" "$stat_key"
-            printf "%s\n" "${other_procs[$stat_key]}" | sort
+            printf "%s" "${other_procs[$stat_key]}" | sort
         done
     fi
 
