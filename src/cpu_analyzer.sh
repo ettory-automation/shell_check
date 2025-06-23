@@ -178,6 +178,12 @@ get_status_processes(){
 
 	print_process_block() {
         local title="$1"
+		
+  		if [[ -z "${2:-}" ]]; then
+        	echo "Erro interno: array não definido para '$title'" >&2
+        	return
+    	fi
+	 
 		local array_name="$2"
         local -n procs_ref="$array_name" # Referência ao array associativo
         
