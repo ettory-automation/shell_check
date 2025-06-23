@@ -177,7 +177,6 @@ get_status_processes(){
 	print_process_block() {
         local title="$1"
         shift
-		set +u
         local -n procs_ref="$1" # Referência ao array associativo
         
         if [[ ${#procs_ref[@]} -gt 0 ]]; then
@@ -186,7 +185,6 @@ get_status_processes(){
                 printf "%s\n" "${procs_ref[$pid_key]}"
             done | sort # Ordena por Process ID
         fi
-		set -u
     }
 
 	# Status principais
@@ -208,7 +206,6 @@ get_status_processes(){
     print_process_block "Foreground Process Group (+):" foreground_group_procs
 
     # Outros status não categorizados explicitamente (se houver)
-	set +u
     if [[ ${#other_procs[@]} -gt 0 ]]; then
         printf "\n%b--- Outros Status ---%b\n" "${MAGENTA}" "${NC}"
         for stat_key in "${!other_procs[@]}"; do
@@ -216,7 +213,7 @@ get_status_processes(){
             printf "%s\n" "${other_procs[$stat_key]}" | sort
         done
     fi
-	set -u
+
 	
     printf "\n"	
 }
