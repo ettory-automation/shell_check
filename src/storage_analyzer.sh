@@ -6,8 +6,6 @@ GREEN='\033[1;32m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
 dir_sel=""
-device=''
-device_prefix=''
 
 select_dir(){
 	local input_dir_sel
@@ -65,11 +63,11 @@ get_use_by_inodes(){
 
 	df -h --output=source,iavail,ipcent,itotal "$dir_sel" | awk '
 		NR==1 {
-			printf "%-23s %-18s %-12s %-14s\n", "Diskpath", "Inode Available", "Inode(%)", "Inode(Total)"
+			printf "%-40s %-20s %-10s %-14s\n", "Diskpath", "Inode Available", "Inode(%)", "Inode(Total)"
 			next
 		}
 		{
-    			printf "%-30s %-18s %-12s %-14s\n", $1, $2, $3, $4
+    			printf "%-40s %-20s %-10s %-14s\n", $1, $2, $3, $4
 		}
 	'
 }
@@ -88,15 +86,6 @@ get_dir_details(){
 	' "$dir_sel"
 }
 
-check_logs_disk(){
-	printf "\n${MAGENTA}=== Disk Logs ===${NC}\n\n"
-
-	device=$(df --output=source "$dir_sel" | tail -1)
-	dev_prefix=$(basename "$device" | sed -E 's/[0-9]+$//')
-
-	journalctl -k --since "1 month ago" | grep -i "$dev_prefix"
-}
-
 storage_check(){
 	clear
 	select_dir || return
@@ -104,7 +93,6 @@ storage_check(){
 	get_mountpoint_details
 	get_use_by_inodes
 	get_dir_details
-	check_logs_disk
 
 	printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
 	read -r
