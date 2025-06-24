@@ -232,7 +232,7 @@ get_status_processes(){
     if array_declared_and_not_empty other_procs; then
         printf "\n%b--- Outros Status ---%b\n" "${MAGENTA}" "${NC}"
 	    for stat_key in "${!other_procs[@]}"; do
-	        printf "\nOutro Status (%s):\n" "$stat_key"
+	        printf "\n${MAGENTA}Outro Status (%s): ${NC}\n" "$stat_key"
 	        echo "${other_procs[$stat_key]}" | tr '|' '\n' | sort
 	    done
 	fi
