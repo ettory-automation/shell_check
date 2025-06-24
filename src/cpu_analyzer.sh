@@ -113,14 +113,10 @@ get_consumption_per_core(){
 
 array_declared_and_not_empty() {
     local name="$1"
-    if ! declare -p "$name" 2>/dev/null | grep -q 'declare -A'; then
-        return 1
-    fi
-    
-    local count 
-    count=$(eval "[[ -v ${name} ]] && echo \${#${name}[@]}" 2>/dev/null || echo 0)
-
-    [[ "$count" -gt 0 ]]
+    eval "declare -p $name" &>/dev/null || return 1
+    local count
+    count=$(eval "echo \${#$name[@]}") || count=0
+    [[ $count -gt 0 ]]
 }
 
 format_process_line(){
@@ -182,6 +178,7 @@ get_status_processes(){
 	while IFS= read -r line; do
 		read -r stat pid user comm <<< "$(awk '{print $1, $2, $3, substr($0, index($0,$4))}' <<< "$line")" || true
 
+        local main_status_full="$stat"
 		local main_status="${stat:0:1}"
 		local formatted_line=$(format_process_line "$pid" "$user" "$comm")
 
@@ -193,10 +190,10 @@ get_status_processes(){
             T)	stopped_procs[$pid]="$formatted_line" ;;
             X)	dead_procs[$pid]="$formatted_line" ;;
             *)
-                if [[ -n "${other_procs[$main_status]+x}" ]]; then
-                    other_procs[$main_status]+="$formatted_line|"
+                if [[ -n "${other_procs[$main_status_full]+x}" ]]; then
+                    other_procs[$main_status_full]+="$formatted_line|"
                 else
-                    other_procs[$main_status]="$formatted_line|"
+                    other_procs[$main_status_full]="$formatted_line|"
                 fi
                 ;;
         esac
