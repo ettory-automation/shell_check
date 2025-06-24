@@ -59,7 +59,8 @@ get_mountpoint_details(){
 get_dir_details(){
 	printf "\n${MAGENTA}=== TOP 15: Fully Directories ["$dir_sel"] ===\n${NC}"
 	printf "\n"
-	# Pode falhar por permissões em alguns subdiretórios, não é erro fatal
+	
+    # Pode falhar por permissões em alguns subdiretórios, não é erro fatal
 	set +e
 	du "$dir_sel" -h --max-depth=5 2>/dev/null | sort -hr | head -n 15
 	set -e

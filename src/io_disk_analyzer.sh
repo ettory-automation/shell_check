@@ -76,7 +76,7 @@ set_interval_bits(){
  	printf "\n"
     read -rp "[*] Limite de I/O (ex: 1G, 1M, 1K ou bytes): " input
 
-    # Expressão regex para extrair número e unidade (case insensitive)
+    # RegEx para extrair número e unidade (case insensitive)
     if [[ "$input" =~ ^([0-9]+)([KMG]?)$ ]]; then
         num=${BASH_REMATCH[1]}
         unit=${BASH_REMATCH[2],,}  # para minúsculo
