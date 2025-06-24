@@ -2,9 +2,12 @@
 set -eou pipefail
 
 RED='\033[1;31m'
+GREEN='\033[1;32m'
 MAGENTA='\033[1;35m'
 NC='\033[0m'
 dir_sel=""
+device=''
+device_prefix=''
 
 select_dir(){
 	local input_dir_sel
@@ -43,27 +46,55 @@ select_dir(){
 
 get_dir_analysis(){
 	printf "\n"
-	printf "${MAGENTA}=== Directory Analyzed: ["$dir_sel"] ===${NC}"
+	printf "${MAGENTA}=== Mountpoint Analyzed ===${NC}"
 	printf "\n\n"
-	df -h "$dir_sel"
+	df -h --output=source,used,pcent,target "$dir_sel"
 }
 
 get_mountpoint_details(){
-	printf "\n${MAGENTA}=== Mountpoint's System Data ["$dir_sel"] ===\n${NC}"
+	printf "\n${MAGENTA}=== Mountpoint Filesystem Data ===\n${NC}"
 	printf "\n"
 	local typefs=$(findmnt -n -o FSTYPE --target "$dir_sel" || true)
 	mountpoint "$dir_sel" || true
 	printf "Type: %s\n" "$typefs"
 }
 
-get_dir_details(){
-	printf "\n${MAGENTA}=== TOP 15: Fully Directories ["$dir_sel"] ===\n${NC}"
+get_use_by_inodes(){
+	printf "\n${MAGENTA}=== Inodes Consumption ===\n${NC}"
 	printf "\n"
-	
-    # Pode falhar por permissões em alguns subdiretórios, não é erro fatal
-	set +e
-	du "$dir_sel" -h --max-depth=5 2>/dev/null | sort -hr | head -n 15
-	set -e
+
+	df -h --output=source,iavail,ipcent,itotal "$dir_sel" | awk '
+		NR==1 {
+			printf "%-20s %-18s %-12s %-14s\n", "Diskpath", "Inode Available", "Inode(%)", "Inode(Total)"
+			next
+		}
+		{
+    		printf "%-20s %-18s %-12s %-14s\n", $1, $2, $3, $4
+		}
+	'
+}
+
+get_dir_details(){
+	printf "\n${MAGENTA}=== TOP 15: Fully Directories ===\n${NC}"
+	printf "\n"
+
+	time bash -c '
+		dir_sel="$0"
+		find "$dir_sel" -xdev -type d -mindepth 0 -maxdepth 5 -print0 2>/dev/null \
+			! -path "/proc*" ! -path "/sys*" ! -path "/dev*" ! -path "/run*" \
+			! -path "/var/lib/docker*" ! -path "/snap*" ! -path "/tmp*" |
+			xargs -0 -P "$(nproc)" -n 10 du -sh 2>/dev/null |
+			sort -hr | head -n 15
+	' "$dir_sel"
+}
+
+check_logs_disk(){
+	printf "\n${MAGENTA}=== Disk Logs ===${NC}\n\n"
+
+	device=$(df --output=source "$dir_sel" | tail -1)
+	dev_prefix=$(basename "$device" | sed -E 's/[0-9]+$//')
+
+	journalctl -k --since "1 month ago" | grep -i "$dev_prefix"
 }
 
 storage_check(){
@@ -71,7 +102,9 @@ storage_check(){
 	select_dir || return
 	get_dir_analysis
 	get_mountpoint_details
+	get_use_by_inodes
 	get_dir_details
+	check_logs_disk
 
 	printf "\n${MAGENTA}Pressione ENTER para retornar ao menu...${NC}"
 	read -r
