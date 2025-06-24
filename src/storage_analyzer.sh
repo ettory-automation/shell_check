@@ -65,11 +65,11 @@ get_use_by_inodes(){
 
 	df -h --output=source,iavail,ipcent,itotal "$dir_sel" | awk '
 		NR==1 {
-			printf "%-20s %-18s %-12s %-14s\n", "Diskpath", "Inode Available", "Inode(%)", "Inode(Total)"
+			printf "%-23s %-18s %-12s %-14s\n", "Diskpath", "Inode Available", "Inode(%)", "Inode(Total)"
 			next
 		}
 		{
-    		printf "%-20s %-18s %-12s %-14s\n", $1, $2, $3, $4
+    			printf "%-30s %-18s %-12s %-14s\n", $1, $2, $3, $4
 		}
 	'
 }
