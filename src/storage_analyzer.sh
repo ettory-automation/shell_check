@@ -46,7 +46,7 @@ get_dir_analysis(){
 	printf "\n"
 	printf "${MAGENTA}=== Mountpoint Analyzed ===${NC}"
 	printf "\n\n"
-	df -h --output=source,used,pcent,target "$dir_sel"
+	df -h --output=source,size,used,pcent,target "$dir_sel"
 }
 
 get_mountpoint_details(){
