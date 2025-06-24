@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail 
+set -eou pipefail 
 
 GREEN='\033[1;32m'
 RED='\033[1;31m'
@@ -36,8 +36,9 @@ get_consumption_per_core(){
     echo "-------------------------------------------------------------------------------------------"
 
     local prev_stats=$(read_cpu_stats)
-
-    for i in {1..4}; do
+    local cores=$(nproc)
+    
+    for ((i=1; i<="$cores"; i++)); do
         sleep 5
 		printf "\n"
         local current_stats=$(read_cpu_stats)
@@ -110,6 +111,18 @@ get_consumption_per_core(){
     printf "\n"
 }
 
+array_declared_and_not_empty() {
+    local name="$1"
+    if ! declare -p "$name" 2>/dev/null | grep -q 'declare -A'; then
+        return 1
+    fi
+    
+    local count 
+    count=$(eval "[[ -v ${name} ]] && echo \${#${name}[@]}" 2>/dev/null || echo 0)
+
+    [[ "$count" -gt 0 ]]
+}
+
 format_process_line(){
 	local pid="$1"
     local user="$2"
@@ -180,8 +193,12 @@ get_status_processes(){
             T)	stopped_procs[$pid]="$formatted_line" ;;
             X)	dead_procs[$pid]="$formatted_line" ;;
             *)
-				other_procs[$main_status]+="$formatted_line|"
-    			;;
+                if [[ -n "${other_procs[$main_status]+x}" ]]; then
+                    other_procs[$main_status]+="$formatted_line|"
+                else
+                    other_procs[$main_status]="$formatted_line|"
+                fi
+                ;;
         esac
 
 		if [[ "${#stat}" -gt 1 ]]; then
@@ -215,8 +232,8 @@ get_status_processes(){
     print_process_block "Foreground Process Group (+):" foreground_group_procs
 
     # Outros status não categorizados explicitamente (se houver)
-	if [[ ${#other_procs[@]} -gt 0 ]]; then
-	    printf "\n%b--- Outros Status ---%b\n" "${MAGENTA}" "${NC}"
+    if array_declared_and_not_empty other_procs; then
+        printf "\n%b--- Outros Status ---%b\n" "${MAGENTA}" "${NC}"
 	    for stat_key in "${!other_procs[@]}"; do
 	        printf "\nOutro Status (%s):\n" "$stat_key"
 	        echo "${other_procs[$stat_key]}" | tr '|' '\n' | sort
