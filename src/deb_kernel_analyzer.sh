@@ -7,6 +7,7 @@ MAGENTA='\033[1;35m'
 NC='\033[0m'
 
 get_kernel_ver_installed_deb() {
+	printf "\n"
     printf "\n${MAGENTA}=== Kernel Versions Installed ===\n${NC}"
     dpkg --list | grep -E 'linux-image-[0-9]+' | awk '{print $2}' | sort -V | tail -n 5 || true
 }
