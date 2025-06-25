@@ -12,8 +12,6 @@ get_kernel_ver_installed_deb() {
 }
 
 get_kernel_run_deb() {
-	printf "\n"
-
     printf "\n${MAGENTA}=== Running Kernel ===\n${NC}\n"
     uname -r
 }
