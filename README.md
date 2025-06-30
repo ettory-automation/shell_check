@@ -1,6 +1,6 @@
 ## Download e Utilização
 
-1. Para realizar o download do projeto, basta executar o comando abaixo dentro de um server utilizando a ferramenta `curl`:
+1. Para realizar o download do projeto, basta executar o comando abaixo dentro de um server utilizando a ferramenta `curl` ou `wget`:
 
 ```
 curl -L -o shell_check.zip https://github.com/ettorydevops/shell_check/archive/refs/heads/main.zip || \
