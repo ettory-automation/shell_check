@@ -14,7 +14,7 @@ unzip shell_check.zip
 cd shell_check-main/view
 ```
 
-3. Modifique as permissões do arquivo menu.sh dentro do diretório /view:
+3. Modifique as permissões do arquivo `menu.sh` dentro do diretório `/view`:
 
 ```
 chmod +x menu.sh
