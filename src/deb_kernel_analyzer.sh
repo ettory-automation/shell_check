@@ -34,7 +34,7 @@ get_kernel_update_logs_deb() {
 get_status_autoupgrades_deb() {
     printf "\n${MAGENTA}=== Unattended Upgrades Status ===\n${NC}"
 
-    if systemctl list-unit-files --type=service | grep -q "unattended-upgrades.service"; then
+    if systemctl list-unit-files --type=service | grep -q "unattended-upgrades.service" || true; then
         if systemctl is-active --quiet unattended-upgrades.service; then
 			printf "\n"
             printf "${GREEN}unattended-upgrades.service está ativo. Atualizações automáticas habilitadas.${NC}"
