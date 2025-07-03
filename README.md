@@ -1,27 +1,27 @@
 ## Download e Utilização
 
-1. Para realizar o download do projeto, basta executar o comando abaixo dentro de um server utilizando a ferramenta `curl` ou `wget`:
+1. Para realizar o download do projeto sem `git-cli`, basta executar o comando abaixo dentro de um server utilizando a ferramenta `curl` ou `wget`:
 
-```
-curl -L -o shell_check.zip https://github.com/ettorydevops/shell_check/archive/refs/heads/main.zip || \
-wget -O shell_check.zip https://github.com/ettorydevops/shell_check/archive/refs/heads/main.zip 
+```bash
+curl -L -o shell_check.zip https://github.com/automation-ems-3db/shell_check/archive/refs/heads/main.zip || \
+wget -O shell_check.zip https://github.com/automation-ems-3db/shell_check/archive/refs/heads/main.zip 
 ```
 
 2. Após realizar o download, extraia o projeto com a ferramenta `unzip`:
 
-```
+```bash
 unzip shell_check.zip
 cd shell_check-main/view
 ```
 
 3. Modifique as permissões do arquivo `menu.sh` dentro do diretório `../view`:
 
-```
+```bash
 chmod +x menu.sh
 ```
 
-4. Execute o arquivo nomeado como `menu.sh` (altamente recomendado utilização de `sudo`):
+4. Execute o arquivo nomeado como `menu.sh` para utilização (altamente recomendado utilização de `sudo` para maior precisão de informações captadas):
 
-```
+```bash
 ./menu.sh
 ```
