@@ -28,7 +28,7 @@ read_cpu_stats(){
 get_consumption_per_core(){
     printf "\n"
     printf "%b\n" "${MAGENTA}=== Consumo de CPU por Core ===${NC}"
-	printf "\n"
+    printf "\n"
     
     printf "%-10s %-10s %-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s\n" \
            "timestamp" "core" "%usr" "%nice" "%sys" "%idle" "%iowait" "%irq" "%soft" "%total"
@@ -36,14 +36,23 @@ get_consumption_per_core(){
     echo "-------------------------------------------------------------------------------------------"
 
     local prev_stats=$(read_cpu_stats)
-    local cores=$(nproc)
-    
-    for ((i=1; i<="$cores"; i++)); do
-        sleep 5
-		printf "\n"
+
+    # number of cycles
+    local cycles=$(nproc)
+
+    # saves position below header
+    tput sc
+
+    for ((i=1; i<=cycles; i++)); do
+        sleep 3
         local current_stats=$(read_cpu_stats)
         local timestamp=$(date +%H:%M:%S)
-        
+
+        tput rc
+
+	# clears to the end of the screen
+        printf "\033[J"
+
         echo "$prev_stats"$'\n'"$current_stats" | awk -v ts="$timestamp" '
             /^cpu/ && NR > 1 {
                 cpu_id = $1
@@ -57,7 +66,7 @@ get_consumption_per_core(){
                 softirq_jif = $8
                 current_total_jif = user_jif + nice_jif + system_jif + idle_jif + iowait_jif + irq_jif + softirq_jif
 
-                if (! (cpu_id in total_prev)) {
+                if (!(cpu_id in total_prev)) {
                     total_prev[cpu_id] = current_total_jif
                     idle_prev[cpu_id] = idle_jif
                     user_prev[cpu_id] = user_jif
@@ -88,10 +97,10 @@ get_consumption_per_core(){
 
                         perc_total_active = 100.0 - perc_idle
 
-                        printf "%-10s %-10s %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f \n",
+                        printf "%-10s %-10s %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f\n",
                                ts, cpu_id, perc_user, perc_nice, perc_system, perc_idle, perc_iowait, perc_irq, perc_softirq, perc_total_active
                     } else {
-                        printf "%-10s %-10s %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f \n",
+                        printf "%-10s %-10s %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f %-8.2f\n",
                                ts, cpu_id, 0.00, 0.00, 0.00, 100.00, 0.00, 0.00, 0.00, 0.00
                     }
 
@@ -106,9 +115,9 @@ get_consumption_per_core(){
                 }
             }
         '
+
         prev_stats=$current_stats
     done
-    printf "\n"
 }
 
 array_declared_and_not_empty() {
