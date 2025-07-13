@@ -40,6 +40,8 @@ get_consumption_per_core(){
     
     for ((i=1; i<="$cores"; i++)); do
         sleep 5
+		# clean output test
+		clear
 		printf "\n"
         local current_stats=$(read_cpu_stats)
         local timestamp=$(date +%H:%M:%S)
