@@ -47,7 +47,7 @@ Até o momento, o Shell Check oferece as seguintes funcionalidades:
 
 ## 📦 Download e Utilização
 
-### 🔁 Clonando com o Git
+### 🔁 Clonando com o Git (Recomendado)
 
 Se o servidor possuir `git` instalado, basta executar:
 
