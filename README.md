@@ -1,6 +1,6 @@
 # Shell Check
 
-##📦 Download e Utilização
+## 📦 Download e Utilização
 
 ### 🔁 Clonando com o Git
 
