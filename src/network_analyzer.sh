@@ -64,7 +64,7 @@ sel_interface(){
 			operstate=$(cat "/sys/class/net/$input_inet/operstate" 2>/dev/null)
 			set -e
 
-			if [[ "$operstate" != "up" ]]; then
+			if [[ "$operstate" != "up" && "$operstate" != "unknown" ]]; then
 				error_message="${RED}Interface '$input_inet' existe, mas está DOWN. Status: ${operstate^^}${NC}\n"
 				inet_is_valid=false
 			fi
