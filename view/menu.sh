@@ -9,8 +9,6 @@ MEMORY_ANALYZER_SCRIPT='../src/memory_analyzer.sh'
 CPU_ANALYZER_SCRIPT='../src/cpu_analyzer.sh'
 STORAGE_ANALYZER_SCRIPT='../src/storage_analyzer.sh'
 NETWORK_ANALYZER_SCRIPT='../src/network_analyzer.sh'
-RHEL_KERNEL_ANALYZER_SCRIPT='../src/rhel_kernel_analyzer.sh'
-DEB_KERNEL_ANALYZER_SCRIPT='../src/deb_kernel_analyzer.sh'
 CHOOSE_MODULE_BY_DISTRO_SCRIPT='../src/choose_module_by_distro.sh'
 IO_DISK_ANALYZER_SCRIPT='../src/io_disk_analyzer.sh'
 
